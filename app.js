@@ -128,22 +128,39 @@ const app = {
             cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0;//set width mới nếu > 0 thì nhận còn không thì sẽ = 0
             cd.style.opacity = newCdWidth / cdWidth;//opacity mờ dần
         }
+         //xử lý CD quay / dừng
+        const cdThumbAnimate = cdThumb.animate(
+        [
+          {
+            transform: 'rotate(360deg)',
+          },
+        ],
+        {
+          duration: 10000,
+          iterations: Infinity,
+        }
+      );
+      cdThumbAnimate.pause();
         //Xử lý khi clickplay
         playBtn.onclick = function(){
             if(_this.isPlaying){
                 audio.pause();
+                
             }else{
                 audio.play();
+                
             }
             //khi song play
             audio.onplay = function(){
                 _this.isPlaying = true;
                 player.classList.add('playing')
+                cdThumbAnimate.play();
             }
             //khi song pause
             audio.onpause = function(){
                 _this.isPlaying = false;
                 player.classList.remove('playing')
+                cdThumbAnimate.pause();
             }
             //khi tiến độ bài hát thay đổi
             audio.ontimeupdate = function(){
@@ -169,6 +186,7 @@ const app = {
              audio.play();
              _this.render();
              _this.scrollToActiveSong();
+             cdThumbAnimate.play();
          }
          //Prev song
          prevBtn.onclick = function(){
